@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-navigation"
+        version="0.0.1">
+    <engines>
+        <engine name="cordova" version=">=4.0.0" />
+    </engines>
+    <name>Navigation</name>
+    <description>AMap Navigation</description>
+    <author>luo cong qiu</author>
+    <keywords>cordova, navigation , ios, android</keywords>
+
+    <js-module src="www/Navigation.js" name="Navigation">
+        <clobbers target="window.Navigation" />
+    </js-module>
+
+    <js-module src="www/Geolocation.js" name="Geolocation">
+        <clobbers target="window.GeolocationPlugin" />
+    </js-module>
+
+    <platform name="android">
+
+        <preference name="NAVIGATION_API_KEY" />
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+            <!--用于申请调用A-GPS模块-->
+            <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+            <!--用于申请获取蓝牙信息进行室内定位-->
+            <uses-permission android:name="android.permission.BLUETOOTH" />
+            <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Navigation">
+                <param name="android-package" value="com.cordova.plugins.navigation.NavigationPlugin" />
+            </feature>
+            <feature name="Geolocation">
+                <param name="android-package" value="com.cordova.plugins.location.LocationPlugin" />
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity android:name="com.cordova.plugins.navigation.NavigationActivity" android:theme="@android:style/Theme.NoTitleBar" />
+            <service android:name="com.amap.api.location.APSService" />
+            <meta-data android:name="com.amap.api.v2.apikey" android:value="$NAVIGATION_API_KEY" />
+        </config-file>
+
+        <source-file src="src/android/src/navigation/NavigationPlugin.java" target-dir="src/com/cordova/plugins/navigation" />
+        <source-file src="src/android/src/navigation/NavigationActivity.java" target-dir="src/com/cordova/plugins/navigation" />
+        <source-file src="src/android/src/navigation/speech/CallBack.java" target-dir="src/com/cordova/plugins/navigation/speech" />
+        <source-file src="src/android/src/navigation/speech/IFlySpeech.java" target-dir="src/com/cordova/plugins/navigation/speech" />
+        <source-file src="src/android/src/navigation/speech/NavigationBroadcast.java" target-dir="src/com/cordova/plugins/navigation/speech" />
+        <source-file src="src/android/src/navigation/speech/Speech.java" target-dir="src/com/cordova/plugins/navigation/speech" />
+        <source-file src="src/android/src/navigation/util/ErrorInfo.java" target-dir="src/com/cordova/plugins/navigation/util" />
+
+        <source-file src="src/android/src/location/LocationPlugin.java" target-dir="src/com/cordova/plugins/location" />
+        <source-file src="src/android/src/location/LocationListener.java" target-dir="src/com/cordova/plugins/location" />
+        <source-file src="src/android/src/location/OnceLocationListener.java" target-dir="src/com/cordova/plugins/location" />
+
+        <source-file src="src/android/libs/armeabi/libGNaviData.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libGNaviGuide.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libGNaviMap.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libGNaviMapex.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libGNaviPos.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libGNaviRoute.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libGNaviSearch.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libGNaviUtils.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libmsc.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libRoadLineRebuildAPI.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/librtbt800.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/libs/armeabi/libwtbt800.so" target-dir="libs/armeabi" />
+
+        <source-file src="src/android/libs/armeabi/libGNaviData.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libGNaviGuide.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libGNaviMap.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libGNaviMapex.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libGNaviPos.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libGNaviRoute.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libGNaviSearch.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libGNaviUtils.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libmsc.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libRoadLineRebuildAPI.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/librtbt800.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="src/android/libs/armeabi/libwtbt800.so" target-dir="libs/armeabi-v7a" />
+
+        <source-file src="src/android/libs/AMap3DMap_5.6.0_AMapNavi_5.5.0_20171130.jar" target-dir="libs" />
+        <source-file src="src/android/libs/AMap_Search_V5.5.0_20171107.jar" target-dir="libs" />
+        <source-file src="src/android/libs/Msc.jar" target-dir="libs" />
+
+        <source-file src="src/android/libs/AMap_Location_V3.6.1_20171012.jar" target-dir="libs" />
+    </platform>
+</plugin>

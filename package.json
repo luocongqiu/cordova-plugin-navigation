@@ -1,0 +1,29 @@
+{
+  "name": "cordova-plugin-navigation",
+  "version": "0.0.1",
+  "description": "Cordova AMap Navigatioin Plugin",
+  "cordova": {
+    "id": "cordova-plugin-navigation",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luocongqiu/cordova-plugin-navigation.git"
+  },
+  "keywords": [
+    "cordova",
+    "navigation",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=4.0.0"
+    }
+  ],
+  "author": "luo cong qiu"
+}
