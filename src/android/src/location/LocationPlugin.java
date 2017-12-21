@@ -1,37 +1,49 @@
 package com.cordova.plugins.location;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PermissionHelper;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class LocationPlugin extends CordovaPlugin {
 
     private AMapLocationClient client;
     private LocationListener locationListener;
+    private Map<Integer, CallbackContextHolder> permissionCallback = new HashMap<Integer, CallbackContextHolder>();
+
+    private String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (!action.equals("getCurrentPosition") && !action.equals("watchPosition")) {
             return false;
         }
-        this.initClient(action.equals("getCurrentPosition"), callbackContext);
+
+        if (!hasPermisssion()) {
+            int requestCode = UUID.randomUUID().hashCode();
+            PermissionHelper.requestPermissions(this, requestCode, permissions);
+            permissionCallback.put(requestCode, new CallbackContextHolder(action.equals("getCurrentPosition"), callbackContext));
+        } else {
+            this.initClient(action.equals("getCurrentPosition"), callbackContext);
+        }
 
         PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
         pluginResult.setKeepCallback(true);
         callbackContext.sendPluginResult(pluginResult);
         return true;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.destroyLocation(this.client);
-        this.client = null;
     }
 
     private void initClient(boolean isOnceLocation, CallbackContext callbackContext) {
@@ -55,8 +67,8 @@ public class LocationPlugin extends CordovaPlugin {
         } else {
             LocationListener locationListener = new LocationListener();
             locationListener.addCallback(callbackContext);
-            this.locationListener = new LocationListener();
             client.setLocationListener(locationListener);
+            this.locationListener = locationListener;
             this.client = client;
         }
         client.startLocation();
@@ -78,10 +90,54 @@ public class LocationPlugin extends CordovaPlugin {
         return option;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.destroyLocation(this.client);
+        this.client = null;
+    }
+
     private void destroyLocation(AMapLocationClient client) {
         if (client == null) {
             return;
         }
         client.onDestroy();
+    }
+
+    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
+        PluginResult result;
+
+        CallbackContextHolder contextHolder = permissionCallback.get(requestCode);
+        if (contextHolder == null) {
+            return;
+        }
+
+        CallbackContext context = contextHolder.getCallbackContext();
+
+        permissionCallback.remove(requestCode);
+
+        for (int r : grantResults) {
+            if (r == PackageManager.PERMISSION_DENIED) {
+                result = new PluginResult(PluginResult.Status.ILLEGAL_ACCESS_EXCEPTION);
+                context.sendPluginResult(result);
+                return;
+            }
+
+        }
+        this.initClient(contextHolder.isOnceLocation(), context);
+    }
+
+
+    public void requestPermissions(int requestCode) {
+        PermissionHelper.requestPermissions(this, requestCode, permissions);
+    }
+
+    public boolean hasPermisssion() {
+        for (String p : permissions) {
+            if (!PermissionHelper.hasPermission(this, p)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

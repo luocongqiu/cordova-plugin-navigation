@@ -59,6 +59,7 @@
 
         <source-file src="src/android/src/navigation/NavigationPlugin.java" target-dir="src/com/cordova/plugins/navigation" />
         <source-file src="src/android/src/navigation/NavigationActivity.java" target-dir="src/com/cordova/plugins/navigation" />
+        <source-file src="src/android/src/navigation/NavigationOption.java" target-dir="src/com/cordova/plugins/navigation" />
         <source-file src="src/android/src/navigation/speech/CallBack.java" target-dir="src/com/cordova/plugins/navigation/speech" />
         <source-file src="src/android/src/navigation/speech/IFlySpeech.java" target-dir="src/com/cordova/plugins/navigation/speech" />
         <source-file src="src/android/src/navigation/speech/NavigationBroadcast.java" target-dir="src/com/cordova/plugins/navigation/speech" />
@@ -68,6 +69,7 @@
         <source-file src="src/android/src/location/LocationPlugin.java" target-dir="src/com/cordova/plugins/location" />
         <source-file src="src/android/src/location/LocationListener.java" target-dir="src/com/cordova/plugins/location" />
         <source-file src="src/android/src/location/OnceLocationListener.java" target-dir="src/com/cordova/plugins/location" />
+        <source-file src="src/android/src/location/CallbackContextHolder.java" target-dir="src/com/cordova/plugins/location" />
 
         <source-file src="src/android/libs/armeabi/libGNaviData.so" target-dir="libs/armeabi" />
         <source-file src="src/android/libs/armeabi/libGNaviGuide.so" target-dir="libs/armeabi" />
